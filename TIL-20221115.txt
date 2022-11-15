@@ -1,0 +1,191 @@
+자료구조와 알고리즘
+정렬
+- 정렬(Sort)이란 데이터를 순서대로 나열하는 방법으로 이진 탐색을 가능하게도 하고 정렬을 이용함으로써 데이터를 조금 더 효율적으로 탐색할 수 있다.
+
+
+
+버블 정렬
+- 버블  정렬(Bubble Sort)이란 가장 쉽고 직관적 정렬 방법이다.
+
+
+
+#[4, 6, 2, 9, 1]
+# -> -> -> ->
+#[4, 2, 6, 1, 9]
+# -> -> ->
+#[2, 4, 1, 6, 9]
+# -> ->
+#[2, 1, 4, 6, 9]
+# ->
+#[1, 2, 4, 6, 9]
+# 배열의 크기 -1만큼 반복했다가 한 개씩 줄어들면서 반복.
+
+
+버블 정렬은 첫 번째 자료와 두 번째 자료를, 두 번째 자료와 세 번째 자료를, 세 번째와 네 번째를, … 이런 식으로 자료를 비교하고 교환하면서 자료를 정렬하는 방식이다. 큰 숫자와 작은 숫자가 차례대로 배열될 경우 둘의 위치를 바꿔주고 다시 뒤에 숫자와 비교하여 넘어가는 방식이다.
+
+
+
+input = [4, 6, 2, 9, 1]
+
+def bubble_sort(array):
+    n = len(array)
+    for i in range(n - 1): # n의 길이 만큼 반복 (O n**2)
+        for j in range(n - i - 1):  # 한번은 맨 마지막에 비교를 하지 않아도 되기 때문, i만큼 반복하면서 맨 뒤에 있는 것이 정렬        print(j)
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+
+    return
+
+
+bubble_sort(input)
+print(input)  # [1, 2, 4, 6, 9]
+
+
+
+
+선택 정렬
+- 선택 정렬(Selection Sort)는 선택해서 정렬하는 방식으로 전체에서 최솟값을 선택해서 오름차순으로 정렬한다. 현재 데이터의 상태와 상관없이 항상 비교하고 위치를 바꾸는 방식이다.
+
+
+
+input = [4, 6, 2, 9, 1]
+
+
+#[4 6 2 9 1]
+
+#[1 6 2 9 4]
+
+#[1 2 6 9 4]
+
+#[1 2 4 9 6]
+
+
+def selection_sort(array):
+    n = len(array)
+
+    for i in range(5 - 1):
+        min_index = i
+        for j in range(5 - i):
+            if array[i + j] < array[min_index]:
+                min_index = i + j
+        array[i], array[min_index] = array[min_index], array[i]
+    return
+
+
+selection_sort(input)
+print(input) # [1, 2, 4, 6, 9]
+
+
+
+
+삽입 정렬
+- 삽입 정렬(Insertion Sort)은 전체에서 하나씩 올바른 위치에 삽입하는 방식으로 필요할 때만 위치를 변경하므로 매우 효율적인 방식이다.
+
+
+
+input = [4, 6, 2, 9, 1]
+
+
+# [4 6 2 9 1]
+
+# [4 6 2 9 1]
+
+# [2 4 6 9 1]
+
+# [1 2 4 6 9]
+
+
+def insertion_sort(array):
+    n = len(array)
+    for i in range(1, n):
+        for j in range(i):
+            if array[i - j - 1] > array[i - j]:
+                array[i - j - 1], array[i - j] = array[i - j], array[i - j - 1]
+            else:
+                break
+    return
+
+
+insertion_sort(input)
+print(input) # [1, 2, 4, 6, 9]
+
+
+병합 정렬
+- 병합 정렬(Merge Sort)은 배열의 앞 부분과 뒷 부분 두 그룹으로 나눠 각각 정렬한 다음 병합하는 정렬이다. 자기 자신을 포함하는 형식으로 함수를 이용해서 MergeSort(시작점, 끝점) 으로 코드에 정의한다. 그러면 'MergeSort(0, N) = Merge(MergeSort(0, N/2) + MergeSort(N/2, N))' 라고 코드를 작성할 수 있다. 0부터 N까지 정렬한 걸 보기 위해서는 0부터 N/2 까지 정렬한 것과 N/2부터 N까지 정렬한 걸 합치면 된다. 
+
+
+
+array = [5, 3, 2, 1, 6, 8, 7, 4]
+
+
+def merge_sort(array):
+    if len(array) <= 1:
+        return array
+    mid = len(array) // 2
+    left_array = merge_sort(array[:mid])
+    right_array = merge_sort(array[mid:])
+    return merge(left_array, right_array)
+
+
+def merge(array1, array2):
+    result = []
+    array1_index = 0
+    array2_index = 0
+    while array1_index < len(array1) and array2_index < len(array2):
+        if array1[array1_index] < array2[array2_index]:
+            result.append(array1[array1_index])
+            array1_index += 1
+        else:
+            result.append(array2[array2_index])
+            array2_index += 1
+
+    if array1_index == len(array1):
+        while array2_index < len(array2):
+            result.append(array2[array2_index])
+            array2_index += 1
+
+    if array2_index == len(array2):
+        while array1_index < len(array1):
+            result.append(array1[array1_index])
+            array1_index += 1
+
+    return result
+
+
+print(merge_sort(array))  # [1, 2, 3, 4, 5, 6, 7, 8] 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+오늘의 벽은?
+- 하루에 몇개씩 꾸준히..!  오늘부터 프로그래머스 최소 3문제..?씩 나 풀기로 나 자신과 약속했다. 오늘 하루는 알고리즘과 프로그래머스 문제로 하루를 보냈다. 안그래도 긴 알고리즘 소요시간에 형편없는 수준으로 코딩테스트를 하다보니 요령이 없어 시간을 보낸 것 같다. 프로그래머스 문제는 하루 공부가 다 끝난 시간에 가볍게 풀어보는 식으로 해야겠다.
+
+- 복습은 꾸준히..! 자바스크립트 강의를 복습해봤는데 다시 공부를 돌아와 보니 엉망이었다. 파이썬 하듯이 불리언 앞글자를 대문자로 자꾸 입력하고 if문에는 괄호를 누락하고 console.log()를 찍어야되는데 습관적으로 print()를 찍고 있었다... 최근에 파이썬을 많이 하다보니 무의식적으로 자꾸 오류를 범했던 것 같다.. 더 심도 있게 공부하기 위해 내일부터 바닐라JS를 공부해봐야겠다.
+
+
+
+
+
+
+
+하루의 마무리
+- 오늘은 어제보다 나은 내가 되기를. 나는 무교지만 매일 간절히 바라본다. 당연히 노력이 받침이 되어줘야 이뤄지는 것이지만, 이것은 내 미래의 발전을 위한긍정적인 측면이었다고 생각하고 싶다. 점점 이 기간이 마라톤과 같이 느껴지고 있다. 앞에 남은 기간은 말년병장 전역날짜 기다리듯 까마득하고 주변 참가자들은 저마다 각자 페이스에 맞게 달려가고 있다. 나도 페이스에 맞춰 달리기 위해 열심히 노력중이다. 문득 이 캠프 결승선 완주에는 내가 어떤 감정일까 궁금하다. 끝났다는 기쁨일까, 사람들과의 헤어짐과 내 공부를 아쉬워하는 감정일까.
+
+
+
+
+
+
+
